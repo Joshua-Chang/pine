@@ -1,0 +1,121 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © joshuachang0823
+
+//@version=4
+// study("我的脚本")
+//plot(close)//open close high low
+// sma20=sma(close,20)
+// c20=if sma20>sma20[1]//sma20[0]>sma20[1] 当前bar大于上一个，上扬
+//     color.red
+// else
+//     color.blue
+// plot(sma20,color=c20,style=plot.style_area,transp=50,trackprice=true)
+    
+// study("黄金交叉",overlay=true)
+// strategy("回测",overlay=true)
+// sma20=sma(close,20)
+// sma60=sma(close,60)
+// //4小时或1小时周期时显示15均线 默认为分钟，S/D/W/M为秒日周月
+// sma15=timeframe.period=="240" or timeframe.period=="5D" ? sma(close,15):na
+
+// h1=plot(sma20,title="month",color=color.green)
+// h2=plot(sma60,title="season")
+// // to_buy=sma20[1]<sma60[1] and sma20[0]>sma60[0]//昨天的月线在季线下，且今天的月线反而在季线上。月线穿过季线，本月在本季中热度升高：买
+// //简写
+// to_buy=crossover(sma20,sma60)
+// to_sale=crossunder(sma20,sma60)
+
+// c=sma20>sma60?color.green:color.red
+// fill(h1,h2,color=c)
+
+//buy 可以指买入，也指结束做空（做空平仓）
+//sale可以指卖出，也指结束做多（做多平仓）
+
+//long持有多单，short持有空单，close两者都可平仓
+// to_long=crossover(sma20,sma60)
+// to_short=crossunder(sma20,sma60)
+
+// plotchar(to_long,char="👆",text="long",color=color.green,size=size.small,location=location.belowbar)
+// plotchar(to_short,char="👇",text="short",color=color.red,location=location.abovebar)
+
+// strategy.entry("golden",strategy.long,qty=1000,when=to_long)//策略开始
+// strategy.close("golden",qty=1000,when=to_short)//策略结束
+
+// alertcondition(to_long,title="buy",message="long at {{close}} when {{time}}")
+// alertcondition(to_long,title="sale",message="short at {{close}} when {{time}}")
+
+
+// strategy("回测",overlay=true)
+// len20=input(title="快速线",defval=20,minval=5,maxval=60,step=5)
+// len60=input(title="慢速线",defval=60,minval=6,maxval=160,step=5)
+// sma20=sma(close,len20)
+// sma60=sma(close,len60)
+// //4小时或1小时周期时显示15均线 默认为分钟，D/W/M为日周月
+// sma15=timeframe.period=="240" or timeframe.period=="5D" ? sma(close,15):na
+
+// h1=plot(sma20,title="month",color=color.green)
+// h2=plot(sma60,title="season")
+
+// to_long=crossover(sma20,sma60)
+// to_short=crossunder(sma20,sma60)
+
+// plotchar(to_long,char="👆",text="long",color=color.green,size=size.small,location=location.belowbar)
+// plotchar(to_short,char="👇",text="short",color=color.red,location=location.abovebar)
+
+// strategy.entry("golden",strategy.long,qty=1000,when=to_long)//策略开始
+// strategy.close("golden",qty=1000,when=to_short)//策略结束
+
+
+// study("抵扣草稿",overlay=true)
+// // plotchar(barstate.islast,char="",text="20",location=location.belowbar,offset=-20)//-20往前20根
+// // x=input(20,title="20ma")
+// // l=label.new(bar_index-x,na,text="20ma",color=color.orange,textcolor=color.white,style=label.style_labelup,yloc=yloc.belowbar)
+// // label.delete(l[1])//删除前一个
+
+// x=input(20,title="small")
+// y=input(60,title="mid")
+// z=input(120,title="large")
+
+// close1=close[x]//往前数第20根的收盘价
+// close2=close[y]
+// close3=close[z]
+
+// l1=label.new(bar_index-x,na,tostring(x)+'MA '+tostring(close[x]),
+//  color=color.orange,textcolor=color.white,
+//  style=close[x]>open[x]?label.style_labeldown:label.style_labelup,
+//  yloc=close[x]>open[x]?yloc.abovebar:yloc.belowbar)
+// label.delete(l1[1])
+// l2=label.new(bar_index-y,na,tostring(y)+'MA '+tostring(close[y]),
+//  color=color.blue,textcolor=color.white,
+//  style=close[y]>open[y]?label.style_labeldown:label.style_labelup,
+//  yloc=close[y]>open[y]?yloc.abovebar:yloc.belowbar)
+// label.delete(l2[1])
+// l3=label.new(bar_index-z,na,tostring(z)+'MA '+tostring(close[z]),
+//  color=color.red,textcolor=color.white,
+//  style=close[z]>open[z]?label.style_labeldown:label.style_labelup,
+//  yloc=close[z]>open[z]?yloc.abovebar:yloc.belowbar)
+// label.delete(l3[1])
+
+study("security",overlay=true)
+//当前商品昨天的高低点，适合在小周期内观察是否符合大周期规律：如在观察分线是否超出昨天的高低点
+//syminfo.tickerid 当前商品id
+// dayhigh=security(syminfo.tickerid,"D",high)
+// daylow=security(syminfo.tickerid,"D",low)
+// plot(dayhigh[1],color=color.red,style=plot.style_line)
+// plot(daylow[1],color=color.green,style=plot.style_line)
+
+//当前商品20分钟平均，适合在小周期内观察是否符合大周期规律：如在观察分线是否超出20分钟内的规律
+// sma20=sma(close,20)
+// sma60=sma(close,60)
+// plot(security(syminfo.tickerid,"20",sma20),color=color.green,style=plot.style_line)
+// plot(security(syminfo.tickerid,"60",sma60),color=color.red,style=plot.style_line)
+
+//其他商品id 交易所：代号
+mkt_close=security("BINANCE:BTCUSTD","D",close)
+// (close-close[1])/close[1]今天涨幅 *100数点变百分数，*10000/100百分之几点几几
+my_increase=(close*10000-close[21]*10000)/close[21]*100 //当前货币的涨幅
+mtk_increase=(mkt_close*10000-mkt_close[21]*10000)/mkt_close[21]*100 //大饼的涨幅
+l1=plot(my_increase)
+l2=plot(mtk_increase)
+hline(0)
+fill(l1,l2,color=my_increase>=mtk_increase?color.green:color.red)
