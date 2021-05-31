@@ -1,0 +1,40 @@
+//@version=4
+//sma 简单平均 ema指数平均 wma 权重平均 越近权重越高 更敏感
+//一、单线走势：确认市场长期趋势走向
+// strategy(title="Moving Average", shorttitle="MA", overlay=true)
+// len = input(5, minval=1, title="Length")
+// src = input(close, title="Source")
+// offset = input(title="Offset", type=input.integer, defval=0, minval=-500, maxval=500)
+// out = sma(src, len)
+// plot(out, color=color.blue, title="MA", offset=offset)
+// to_long=crossover(close,out)
+// to_short=crossunder(close,out)
+// strategy.entry("long",strategy.long,qty=1000,when=to_long)
+// strategy.close("long",qty=1000,when=to_short)
+
+// strategy.entry("short",strategy.short,qty=1000,when=to_short)
+// strategy.close("short",qty=1000,when=to_long)
+
+
+//@version=4
+//二、双线交叉：快慢两条ma，查看交叉处
+strategy(title="Moving Average", shorttitle="MA", overlay=true)
+len1 = input(8, minval=1, title="ma quick")
+len2 = input(50, minval=1, title="ma slow")
+src = input(close, title="Source")
+offset = input(title="Offset", type=input.integer, defval=0, minval=-500, maxval=500)
+ma_quick = wma(src, len1)
+ma_slow = sma(src, len2)
+plot(ma_quick, color=color.blue, title="MA-Quick", offset=offset)
+plot(ma_slow, color=color.red, title="MA-Slow", offset=offset)
+
+to_long=crossover(ma_quick,ma_slow)
+to_short=crossunder(ma_quick,ma_slow)
+
+
+strategy.entry("long",strategy.long,qty=1000,when=to_long)
+strategy.close("long",qty=1000,when=to_short)
+
+strategy.entry("short",strategy.short,qty=1000,when=to_short)
+strategy.close("short",qty=1000,when=to_long)
+//三、多线组合：根据bar是否击穿多条线 而减半、清仓、抄底
