@@ -1,0 +1,17 @@
+//@version=4
+strategy("AO")
+lengthAO1=input(5)
+lengthAO2=input(34)
+AO=sma((high-low)/2,lengthAO1)-sma((high-low)/2,lengthAO2)
+AO=sma(hl2,lengthAO1)-sma(hl2,lengthAO2)
+plot(AO,color=change(AO)<=0?#872323 : #007F0E, style=plot.style_histogram)//change(series,n)与前一根bar的差异，n默认1
+h0=hline(0)
+to_long=crossover(AO,h0)
+to_short=crossunder(AO,h0)
+
+
+strategy.entry("long",strategy.long,qty=1000,when=to_long)
+strategy.close("long",qty=1000,when=to_short)
+
+strategy.entry("short",strategy.short,qty=1000,when=to_short)
+strategy.close("short",qty=1000,when=to_long)

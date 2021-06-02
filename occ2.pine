@@ -153,7 +153,7 @@ shortCond   = xshort  // alternative: shortCond[1]? false : (xshort or xshort[1]
 
 // === STRATEGY ===
 // stop loss
-slPoints    = input(defval = 0, title = "Initial Stop Loss Points (zero to disable)", minval = 0)
+slPoints    = input(defval = 0, title = "Initial Stop Loss Points (zero to disable)", minval = 0,type=float)
 tpPoints    = input(defval = 0, title = "Initial Target Profit Points (zero for disable)", minval = 0)
 // Include bar limiting algorithm
 ebar            = input(defval = 10000, title="Number of Bars for Back Testing", minval=0)
